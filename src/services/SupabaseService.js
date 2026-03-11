@@ -6,6 +6,11 @@ const supabase = createClient(
 );
 
 export const getUsuarios = async () => {
+  try {
     const { data } = await supabase.from("usuarios").select();
     return data;
+  } catch (error) {
+    console.error("Error fetching usuarios:", error);
+    throw error;
+  }
 }

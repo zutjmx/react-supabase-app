@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import Swal from 'sweetalert2'
 import { getUsuarios } from "../services/SupabaseService";
 
 export const Usuarios = () => {
@@ -10,9 +11,24 @@ export const Usuarios = () => {
     }, []);
 
     const fetchUsuarios = async () => {
-        const data = await getUsuarios();            
-        setUsuarios(data);
-    }
+        try {
+            Swal.fire({
+                title: 'Cargando usuarios...',
+                allowOutsideClick: false,
+                didOpen: () => {
+                    Swal.showLoading();
+                }
+            });
+
+            const data = await getUsuarios();
+            setUsuarios(data);
+            
+            Swal.close();
+        } catch (error) {
+            console.error("Error fetching usuarios:", error);
+            Swal.fire("Error", "Failed to fetch usuarios", "error");
+        }
+    };
 
     return (
         <div className="container">            
@@ -20,11 +36,16 @@ export const Usuarios = () => {
                 <div className="card-body">
                     <h5 className="card-title">Usuarios</h5>
                     <p className="card-text">Lista de usuarios</p>                    
-                    <table className="table">
+                    <table className="table table-sm table-bordered table-hover table-primary">
                         <thead>
                             <tr>
                                 <th>ID</th>
                                 <th>Nombre</th>
+                                <th>Paterno</th>
+                                <th>Materno</th>
+                                <th>Correo</th>
+                                <th>Nombre de usuario</th>
+                                <th>Creado</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -32,6 +53,11 @@ export const Usuarios = () => {
                                 <tr key={usuario.id}>
                                     <td>{usuario.id}</td>
                                     <td>{usuario.nombre}</td>
+                                    <td>{usuario.paterno}</td>
+                                    <td>{usuario.materno}</td>
+                                    <td>{usuario.email}</td>
+                                    <td>{usuario.username}</td>
+                                    <td>{usuario.created_at}</td>
                                 </tr>
                             ))}
                         </tbody>
