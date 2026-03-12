@@ -30,6 +30,16 @@ export const Usuarios = () => {
         }
     };
 
+    // Función para formatear fechas en formato legible
+    const formatearFecha = (fechaISO) => {
+        const fecha = new Date(fechaISO);
+        return fecha.toLocaleDateString('es-ES', {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+        });
+    };
+
     return (
         <div className="container">            
             <div className="card">                
@@ -57,7 +67,7 @@ export const Usuarios = () => {
                                     <td>{usuario.materno}</td>
                                     <td>{usuario.email}</td>
                                     <td>{usuario.username}</td>
-                                    <td>{usuario.created_at}</td>
+                                    <td>{formatearFecha(usuario.created_at)}</td>
                                 </tr>
                             ))}
                         </tbody>
